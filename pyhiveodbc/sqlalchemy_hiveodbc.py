@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# coding: utf-8
+
 """Integration between SQLAlchemy and Hive.
 
 Some code based on
