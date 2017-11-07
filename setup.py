@@ -23,15 +23,15 @@ with open('README.rst') as readme:
     long_description = readme.read()
 
 setup(
-    name="PyHive",
-    version=pyhive.__version__,
-    description="Python interface to Hive",
+    name="PyHiveODBC",
+    version=pyhiveodbc.__version__,
+    description="Python interface to Hive via ODBC",
     long_description=long_description,
-    url='https://github.com/dropbox/PyHive',
-    author="Jing Wang",
-    author_email="jing@dropbox.com",
+    url='https://github.com/AurelienGalicher/PyHiveODBC',
+    author="Aurelien Galicher",
+    author_email="galicher@gmail.com",
     license="Apache License, Version 2.0",
-    packages=['pyhive', 'TCLIService'],
+    packages=['pyhiveodbc'],
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
@@ -42,18 +42,16 @@ setup(
         'future',
     ],
     extras_require={
-        'presto': ['requests>=1.0.0'],
-        'hive': ['sasl>=0.2.1', 'thrift>=0.10.0', 'thrift_sasl>=0.1.0'],
+        'pyodbc': ['pyodbc>=4.0.10']
         'sqlalchemy': ['sqlalchemy>=0.8.7'],
     },
     tests_require=[
         'mock>=1.0.0',
         'pytest',
         'pytest-cov',
-        'requests>=1.0.0',
+        'pyodbc>=4.0.10',
         'sasl>=0.2.1',
         'sqlalchemy>=0.8.7',
-        'thrift>=0.10.0',
     ],
     cmdclass={'test': PyTest},
     package_data={
@@ -61,8 +59,7 @@ setup(
     },
     entry_points={
         'sqlalchemy.dialects': [
-            'hive = pyhive.sqlalchemy_hive:HiveDialect',
-            'presto = pyhive.sqlalchemy_presto:PrestoDialect',
+            'hiveodbc = pyhiveodbc.sqlalchemy_hiveodbc:HiveODBCDialect'
         ],
     }
 )
