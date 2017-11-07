@@ -303,7 +303,8 @@ class HiveODBCDialect(default.DefaultDialect):
         # Using DESCRIBE works but is uglier.
         try:
             # This needs the table name to be unescaped (no backticks).
-            rows = connection.execute('DESCRIBE {}'.format(full_table)).fetchall()
+            rows = connection.execute('DESCRIBE {}'.format(full_table).encode('UTF-8')).fetchall()
+            rows = [row.decode('UTF-16').encode('UTF-8') for row in rows]
         except exc.OperationalError as e:
             # Does the table exist?
             regex_fmt = r'TExecuteStatementResp.*SemanticException.*Table not found {}'
