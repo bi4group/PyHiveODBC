@@ -2,7 +2,7 @@
 
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
-import pyhive
+import pyhiveodbc
 import sys
 
 
@@ -42,7 +42,7 @@ setup(
         'future',
     ],
     extras_require={
-        'pyodbc': ['pyodbc>=4.0.10']
+        'pyodbc': ['pyodbc>=4.0.10'],
         'sqlalchemy': ['sqlalchemy>=0.8.7'],
     },
     tests_require=[
