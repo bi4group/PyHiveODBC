@@ -185,9 +185,9 @@ class HiveODBCExecutionContext(default.DefaultExecutionContext):
 class HiveODBCDialect(default.DefaultDialect):
     name = b'hiveodbc'
     driver = b'pyodbc'
-    execution_ctx_cls = HiveExecutionContext
-    preparer = HiveIdentifierPreparer
-    statement_compiler = HiveCompiler
+    execution_ctx_cls = HiveODBCExecutionContext
+    preparer = HiveODBCIdentifierPreparer
+    statement_compiler = HiveODBCCompiler
     supports_views = True
     supports_alter = True
     supports_pk_autoincrement = False
