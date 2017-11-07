@@ -33,7 +33,7 @@ class HiveODBCStringTypeBase(types.TypeDecorator):
         raise NotImplementedError("Writing to Hive not supported")
 
 
-class HiveODBCDate(HiveStringTypeBase):
+class HiveODBCDate(HiveODBCStringTypeBase):
     """Translates date strings to date objects"""
     impl = types.DATE
 
@@ -41,7 +41,7 @@ class HiveODBCDate(HiveStringTypeBase):
         return processors.str_to_date(value)
 
 
-class HiveODBCTimestamp(HiveStringTypeBase):
+class HiveODBCTimestamp(HiveODBCStringTypeBase):
     """Translates timestamp strings to datetime objects"""
     impl = types.TIMESTAMP
 
@@ -49,7 +49,7 @@ class HiveODBCTimestamp(HiveStringTypeBase):
         return processors.str_to_datetime(value)
 
 
-class HiveODBCDecimal(HiveStringTypeBase):
+class HiveODBCDecimal(HiveODBCStringTypeBase):
     """Translates strings to decimals"""
     impl = types.DECIMAL
 
@@ -196,11 +196,11 @@ class HiveODBCDialect(default.DefaultDialect):
     description_encoding = None
     supports_multivalues_insert = True
     dbapi_type_map = {
-        'DATE_TYPE': HiveDate(),
-        'TIMESTAMP_TYPE': HiveTimestamp(),
-        'DECIMAL_TYPE': HiveDecimal(),
+        'DATE_TYPE': HiveODBCDate(),
+        'TIMESTAMP_TYPE': HiveODBCTimestamp(),
+        'DECIMAL_TYPE': HiveODBCDecimal(),
     }
-    type_compiler = HiveTypeCompiler
+    type_compiler = HiveODBCTypeCompiler
 
     @classmethod
     def dbapi(cls):
