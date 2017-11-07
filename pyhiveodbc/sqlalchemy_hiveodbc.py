@@ -379,7 +379,7 @@ class HiveODBCDialect(default.DefaultDialect):
     def get_table_names(self, connection, schema=None, **kw):
         query = 'SHOW TABLES'
         if schema:
-            query += ' IN ' + self.identifier_preparer.quote_identifier(schema)
+            query += ' IN ' + schema
         return [row[0].decode('UTF-16') for row in connection.execute(query)]
 
     def do_rollback(self, dbapi_connection):
