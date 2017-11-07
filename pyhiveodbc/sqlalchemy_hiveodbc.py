@@ -25,6 +25,11 @@ from sqlalchemy.sql.compiler import SQLCompiler
 #from pyhive.common import UniversalSet
 import pyodbc
 
+class UniversalSet(object):
+    """set containing everything"""
+    def __contains__(self, item):
+        return True
+
 class HiveODBCStringTypeBase(types.TypeDecorator):
     """Translates strings returned by Thrift into something else"""
     impl = types.String
