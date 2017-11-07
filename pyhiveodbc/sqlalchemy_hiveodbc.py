@@ -288,7 +288,7 @@ class HiveODBCDialect(default.DefaultDialect):
 
     def get_schema_names(self, connection, **kw):
         # Equivalent to SHOW DATABASES
-        return [row[0] for row in connection.execute('SHOW SCHEMAS')]
+        return [row[0].decode('UTF-16').encode('UTF-8') for row in connection.execute('SHOW SCHEMAS'.encode('UTF-8'))]
 
     def get_view_names(self, connection, schema=None, **kw):
         # Hive does not provide functionality to query tableType
