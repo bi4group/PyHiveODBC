@@ -198,10 +198,10 @@ class HiveODBCDialect(default.DefaultDialect):
     supports_empty_insert = False
     supports_native_decimal = True
     supports_native_boolean = True
-    supports_unicode_statements = True
-    supports_unicode_binds = True
-    returns_unicode_strings = True
-    description_encoding = None
+    supports_unicode_statements = False
+    supports_unicode_binds = False
+    returns_unicode_strings = False
+    description_encoding = 'UTF-16'
     supports_multivalues_insert = True
     dbapi_type_map = {
         'DATE_TYPE': HiveODBCDate(),
