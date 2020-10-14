@@ -24,14 +24,17 @@ from sqlalchemy.engine import default
 from sqlalchemy.sql import compiler
 from sqlalchemy.sql.compiler import SQLCompiler
 
-#from pyhive import hive
-#from pyhive.common import UniversalSet
+# from pyhive import hive
+# from pyhive.common import UniversalSet
 import pyodbc
+
 
 class UniversalSet(object):
     """set containing everything"""
+
     def __contains__(self, item):
         return True
+
 
 class HiveODBCStringTypeBase(types.TypeDecorator):
     """Translates strings returned by Thrift into something else"""
@@ -186,8 +189,8 @@ class HiveODBCExecutionContext(default.DefaultExecutionContext):
 
 
 class HiveODBCDialect(default.DefaultDialect):
-    name = b'hiveodbc'
-    driver = b'pyodbc'
+    name = 'hiveodbc'
+    driver = 'pyodbc'
     execution_ctx_cls = HiveODBCExecutionContext
     preparer = HiveODBCIdentifierPreparer
     statement_compiler = HiveODBCCompiler
@@ -198,10 +201,10 @@ class HiveODBCDialect(default.DefaultDialect):
     supports_empty_insert = False
     supports_native_decimal = True
     supports_native_boolean = True
-    supports_unicode_statements = False
+    supports_unicode_statements = True
     supports_unicode_binds = False
     returns_unicode_strings = False
-    description_encoding = 'UTF-16'.encode('UTF-8')
+    description_encoding = 'UTF-16'
     supports_multivalues_insert = True
     dbapi_type_map = {
         'DATE_TYPE': HiveODBCDate(),
@@ -241,7 +244,7 @@ class HiveODBCDialect(default.DefaultDialect):
             )
 
             dsn_connection = 'dsn' in keys or \
-                ('host' in keys and 'database' not in keys)
+                             ('host' in keys and 'database' not in keys)
             if dsn_connection:
                 connectors = ['dsn=%s' % (keys.pop('host', '') or
                                           keys.pop('dsn', ''))]
@@ -285,10 +288,9 @@ class HiveODBCDialect(default.DefaultDialect):
 
         return [[";".join(connectors)], connect_args]
 
-
     def get_schema_names(self, connection, **kw):
         # Equivalent to SHOW DATABASES
-        return [row[0].decode('UTF-16').encode('UTF-8') for row in connection.execute('SHOW SCHEMAS'.encode('UTF-8'))]
+        return [row[0].decode('UTF-16') for row in connection.execute('SHOW SCHEMAS')]
 
     def get_view_names(self, connection, schema=None, **kw):
         # Hive does not provide functionality to query tableType
@@ -303,8 +305,8 @@ class HiveODBCDialect(default.DefaultDialect):
         # Using DESCRIBE works but is uglier.
         try:
             # This needs the table name to be unescaped (no backticks).
-            rows = connection.execute('DESCRIBE {}'.format(full_table).encode('UTF-8')).fetchall()
-            rows = [(row[0].decode('UTF-16').encode('UTF-8'),row[1].decode('UTF-16').encode('UTF-8'),row[2].decode('UTF-16').encode('UTF-8')) for row in rows]
+            rows = connection.execute('DESCRIBE {}'.format(full_table)).fetchall()
+            rows = [(row[0].decode('UTF-16'), row[1].decode('UTF-16'), row[2].decode('UTF-16')) for row in rows]
         except exc.OperationalError as e:
             # Does the table exist?
             regex_fmt = r'TExecuteStatementResp.*SemanticException.*Table not found {}'
@@ -384,8 +386,8 @@ class HiveODBCDialect(default.DefaultDialect):
         query = 'SHOW TABLES'
         if schema:
             query += ' IN ' + schema.upper()
-        query = query.encode('UTF-8')
-        return [row[0].decode('UTF-16').encode('UTF-8') for row in connection.execute(query)]
+        query = query
+        return [row[0].decode('UTF-16') for row in connection.execute(query)]
 
     def do_rollback(self, dbapi_connection):
         # No transactions for Hive
